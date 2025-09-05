@@ -1,0 +1,414 @@
+`index.html`
+```html
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LicitaTech - Plataforma de Tecnologia por Lucas Oliveira</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .hero-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card-hover {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .modal-overlay {
+            background-color: rgba(0,0,0,0.5);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s;
+        }
+        .modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            max-width: 500px;
+            width: 90%;
+        }
+        .logs-table {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .logs-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .logs-table th, .logs-table td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans">
+    <!-- Header -->
+    <header class="hero-gradient text-white shadow-lg">
+        <div class="container mx-auto px-4 py-6 flex justify-between items-center">
+            <h1 class="text-2xl font-bold">LicitaTech</h1>
+            <p class="text-sm">Por Lucas Oliveira - Inovação em Tecnologia</p>
+            <nav class="flex space-x-4">
+                <button id="view-cart" class="bg-white text-gray-800 px-4 py-2 rounded hover:bg-gray-200">Carrinho <span id="cart-count">0</span></button>
+                <a href="#produtos" class="hover:underline">Produtos</a>
+                <button id="login-colaborador" class="bg-blue-500 hover:bg-blue-700 px-4 py-2 rounded">Login Colaborador</button>
+                <button id="login-dono" class="bg-green-500 hover:bg-green-700 px-4 py-2 rounded">Login Dono</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Intro Section -->
+        <section class="text-center mb-12">
+            <h2 class="text-3xl font-semibold mb-4 text-gray-800">Bem-vindo à LicitaTech</h2>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto">Compras diretas e simples de tecnologia de ponta e acessível. Qualquer pessoa pode adquirir produtos imediatimente.</p>
+        </section>
+
+        <!-- Produtos Section -->
+        <section id="produtos" class="mb-12">
+            <h3 class="text-2xl font-bold text-gray-800 mb-6">Produtos Disponíveis</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Produto 1 (Alto padrão) -->
+                <div class="bg-white rounded-lg shadow-md p-6 card-hover">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/c79a9e6a-eac9-4be5-9f5d-808fe5bb9b40.png" alt="Laptop gamer de alta performance com tela de 16 polegadas, processador Intel i9, 32GB RAM, placa de vídeo RTX 4090, teclado mecânico RGB e design aerodinâmico em preto e azul metálico" class="w-full h-48 object-cover rounded mb-4" />
+                    <h4 class="text-xl font-semibold text-gray-800">Laptop Gamer Elite Pro</h4>
+                    <p class="text-gray-600 mb-2">Potência máxima para gamers e profissionais.</p>
+                    <p class="text-green-600 font-bold">Preço: R$ 8.000</p>
+                    <button class="mt-4 bg-purple-500 hover:bg-purple-700 text-white px-4 py-2 rounded w-full" onclick="addToCart('Laptop Gamer Elite Pro', 8000)">Adicionar ao Carrinho</button>
+                </div>
+                <!-- Produto 2 (Alto padrão) -->
+                <div class="bg-white rounded-lg shadow-md p-6 card-hover">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/9081fd7a-aec8-4838-9db3-6bd60d56a0e5.png" alt="Smartphone flagship com tela AMOLED de 6.7 polegadas, câmera tripla de 100MP, processador Snapdragon 8 Gen 3, 256GB armazenamento, bateria de 5000mAh e corpo em vidro com acabamento prateado" class="w-full h-48 object-cover rounded mb-4" />
+                    <h4 class="text-xl font-semibold text-gray-800">Smartphone Ultra Vision</h4>
+                    <p class="text-gray-600 mb-2">O futuro na palma da sua mão.</p>
+                    <p class="text-green-600 font-bold">Preço: R$ 5.500</p>
+                    <button class="mt-4 bg-purple-500 hover:bg-purple-700 text-white px-4 py-2 rounded w-full" onclick="addToCart('Smartphone Ultra Vision', 5500)">Adicionar ao Carrinho</button>
+                </div>
+                <!-- Produto 3 (Alto padrão) -->
+                <div class="bg-white rounded-lg shadow-md p-6 card-hover">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/1e9c4cc3-a3d1-4558-8356-616b57d869e1.png" alt="Fone de ouvido wireless com cancelamento de ruído ativo, bateria de 30 horas, drivers de 40mm, microfones integrados para chamadas e estojo de carregamento compacto em vermelho vibrante" class="w-full h-48 object-cover rounded mb-4" />
+                    <h4 class="text-xl font-semibold text-gray-800">Headphone Sonic Blast</h4>
+                    <p class="text-gray-600 mb-2">Imersão sonora sem fios.</p>
+                    <p class="text-green-600 font-bold">Preço: R$ 1.200</p>
+                    <button class="mt-4 bg-purple-500 hover:bg-purple-700 text-white px-4 py-2 rounded w-full" onclick="addToCart('Headphone Sonic Blast', 1200)">Adicionar ao Carrinho</button>
+                </div>
+                <!-- Produto 4 (Alto padrão) -->
+                <div class="bg-white rounded-lg shadow-md p-6 card-hover">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/010a6e6e-8deb-48d0-badd-04ba326da6df.png" alt="Tablet profissional com tela 4K de 12.9 polegadas, stylus incluído, processador M3, 512GB SSD, suporte 5G e teclado detachável em roxo suave com bordas arredondadas" class="w-full h-48 object-cover rounded mb-4" />
+                    <h4 class="text-xl font-semibold text-gray-800">Tablet Pro Cloud</h4>
+                    <p class="text-gray-600 mb-2">Criatividade em qualquer lugar.</p>
+                    <p class="text-green-600 font-bold">Preço: R$ 6.000</p>
+                    <button class="mt-4 bg-purple-500 hover:bg-purple-700 text-white px-4 py-2 rounded w-full" onclick="addToCart('Tablet Pro Cloud', 6000)">Adicionar ao Carrinho</button>
+                </div>
+                <!-- Produto 5 (Alto padrão) -->
+                <div class="bg-white rounded-lg shadow-md p-6 card-hover">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/c34cf20e-941c-4437-bffc-b896cde6b135.png" alt="Roteador mesh de alta velocidade com cobertura Wi-Fi 6 de até 6000 pés quadrados, 8 antenas externas, segurança WPA3 e design compacto em amarelo e preto com luzes LED indicativas" class="w-full h-48 object-cover rounded mb-4" />
+                    <h4 class="text-xl font-semibold text-gray-800">Router MeshNet Plus</h4>
+                    <p class="text-gray-600 mb-2">Conectividade sem limites.</p>
+                    <p class="text-green-600 font-bold">Preço: R$ 2.500</p>
+                    <button class="mt-4 bg-purple-500 hover:bg-purple-700 text-white px-4 py-2 rounded w-full" onclick="addToCart('Router MeshNet Plus', 2500)">Adicionar ao Carrinho</button>
+                </div>
+                <!-- Produto 6 (Alto padrão) -->
+                <div class="bg-white rounded-lg shadow-md p-6 card-hover">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/ebed0aec-19cd-463b-b373-b9cb31c15111.png" alt="Smartwatch fitness com tela OLED de 1.8 polegadas, GPS integrado, monitoramento de batimentos cardíicos 24/7, resistência à água, e bateria de 10 dias em vermelho esportivo" class="w-full h-48 object-cover rounded mb-4" />
+                    <h4 class="text-xl font-semibold text-gray-800">Smartwatch FitTrack</h4>
+                    <p class="text-gray-600 mb-2">Seu parceiro de saúde diário.</p>
+                    <p class="text-green-600 font-bold">Preço: R$ 800</p>
+                    <button class="mt-4 bg-purple-500 hover:bg-purple-700 text-white px-4 py-2 rounded w-full" onclick="addToCart('Smartwatch FitTrack', 800)">Adicionar ao Carrinho</button>
+                </div>
+                <!-- Produto 7 (Classe média) -->
+                <div class="bg-white rounded-lg shadow-md p-6 card-hover">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/62914b7e-b2c5-489f-a108-2727b2de5171.png" alt="Notebook básico com tela de 15.6 polegadas HD, processador Intel Core i3 de 8ª geração, 8GB RAM, 256GB SSD, bateria de 4 horas e design simples em cinza" class="w-full h-48 object-cover rounded mb-4" />
+                    <h4 class="text-xl font-semibold text-gray-800">Notebook Básico Office</h4>
+                    <p class="text-gray-600 mb-2">Essencial para tarefas diárias como navegação e trabalho.</p>
+                    <p class="text-green-600 font-bold">Preço: R$ 1.800</p>
+                    <button class="mt-4 bg-purple-500 hover:bg-purple-700 text-white px-4 py-2 rounded w-full" onclick="addToCart('Notebook Básico Office', 1800)">Adicionar ao Carrinho</button>
+                </div>
+                <!-- Produto 8 (Classe baixa) -->
+                <div class="bg-white rounded-lg shadow-md p-6 card-hover">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/0b716a81-c5c3-4bff-b7e5-e40fdcfac2e4.png" alt="Smartphone básico com tela LCD de 6.1 polegadas, câmera dupla de 13MP, processador octa-core, 64GB armazenamento, bateria de 3000mAh e carregador incluído em preto simples" class="w-full h-48 object-cover rounded mb-4" />
+                    <h4 class="text-xl font-semibold text-gray-800">Smartphone Essencial Lite</h4>
+                    <p class="text-gray-600 mb-2">Chamadas, mensagens e navegação básica.</p>
+                    <p class="text-green-600 font-bold">Preço: R$ 600</p>
+                    <button class="mt-4 bg-purple-500 hover:bg-purple-700 text-white px-4 py-2 rounded w-full" onclick="addToCart('Smartphone Essencial Lite', 600)">Adicionar ao Carrinho</button>
+                </div>
+                <!-- Produto 9 (Classe baixa) -->
+                <div class="bg-white rounded-lg shadow-md p-6 card-hover">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/ca993c27-b3d0-46d9-8487-2c2e0575d8a2.png" alt="Fone de ouvido básico com fio, drivers de 15mm, controle de volume integrado, cabo de 1.2 metros e plug 3.5mm em branco e preto" class="w-full h-48 object-cover rounded mb-4" />
+                    <h4 class="text-xl font-semibold text-gray-800">Fone Básico Sound Lite</h4>
+                    <p class="text-gray-600 mb-2">Áudio simples para música e chamadas.</p>
+                    <p class="text-green-600 font-bold">Preço: R$ 150</p>
+                    <button class="mt-4 bg-purple-500 hover:bg-purple-700 text-white px-4 py-2 rounded w-full" onclick="addToCart('Fone Básico Sound Lite', 150)">Adicionar ao Carrinho</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Área Logada (inicialmente oculta) -->
+        <section id="area-logada" style="display: none;">
+            <h3 class="text-2xl font-bold text-gray-800 mb-4">Área Restrita</h3>
+            <p class="text-gray-600" id="user-status">Você está logado. Aqui você pode visualizar logs financeiros e relatórios.</p>
+            <div class="mt-6">
+                <h4 class="text-lg font-semibold mb-4">Relatório Financeiro</h4>
+                <div class="bg-white p-4 rounded shadow mb-6">
+                    <p>Total de Vendas: R$ <span id="total-vendas">0</span></p>
+                    <p>Lucro Líquido (após 20% custos): R$ <span id="lucro-liquido">0</span></p>
+                    <p>Número de Vendas: <span id="num-vendas">0</span></p>
+                </div>
+            </div>
+            <div id="logs-container">
+                <h4 class="text-lg font-semibold mb-4">Logs de Vendas</h4>
+                <div class="logs-table bg-white p-4 rounded shadow">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Produto</th>
+                                <th>Valor (R$)</th>
+                                <th>Comprador</th>
+                                <th>Método Pgto</th>
+                            </tr>
+                        </thead>
+                        <tbody id="logs-table-body">
+                            <!-- Logs populados dinamicamente -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <button id="logout" class="mt-6 bg-red-500 hover:bg-red-700 text-white px-4 py-2 rounded">Logout</button>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white text-center py-4">
+        <p>&copy; 2023 LicitaTech por Lucas Oliveira. Todos os direitos reservados.</p>
+    </footer>
+
+    <!-- Modal Login Colaborador -->
+    <div id="modal-colaborador" class="modal-overlay">
+        <div class="modal-content">
+            <h4 class="text-xl font-bold mb-4 text-gray-800">Login Colaborador</h4>
+            <form id="form-colaborador">
+                <label class="block mb-2 text-gray-700">Usuário:</label>
+                <input type="text" id="user-colab" class="w-full px-3 py-2 border rounded mb-4" placeholder="Digite seu usuário" required>
+                <label class="block mb-2 text-gray-700">Senha:</label>
+                <input type="password" id="pass-colab" class="w-full px-3 py-2 border rounded mb-4" placeholder="Digite sua senha" required>
+                <button type="submit" class="w-full bg-blue-500 hover:bg-blue-700 text-white py-2 rounded">Entrar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Login Dono -->
+    <div id="modal-dono" class="modal-overlay">
+        <div class="modal-content">
+            <h4 class="text-xl font-bold mb-4 text-gray-800">Login Dono da Empresa</h4>
+            <form id="form-dono">
+                <label class="block mb-2 text-gray-700">Usuário:</label>
+                <input type="text" id="user-dono" class="w-full px-3 py-2 border rounded mb-4" placeholder="Usuário admin" required>
+                <label class="block mb-2 text-gray-700">Senha:</label>
+                <input type="password" id="pass-dono" class="w-full px-3 py-2 border rounded mb-4" placeholder="Digite sua senha" required>
+                <button type="submit" class="w-full bg-green-500 hover:bg-green-700 text-white py-2 rounded">Entrar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Carrinho -->
+    <div id="modal-cart" class="modal-overlay">
+        <div class="modal-content">
+            <h4 class="text-xl font-bold mb-4 text-gray-800">Seu Carrinho</h4>
+            <div id="cart-items" class="mb-4"></div>
+            <p class="text-lg font-bold">Total: R$ <span id="cart-total">0</span></p>
+            <button id="checkout-btn" class="w-full bg-green-500 hover:bg-green-700 text-white py-2 rounded mt-4" disabled>Finalizar Compra</button>
+            <button onclick="closeModals()" class="w-full bg-gray-500 hover:bg-gray-700 text-white py-2 rounded mt-2">Fechar</button>
+        </div>
+    </div>
+
+    <!-- Modal Checkout -->
+    <div id="modal-checkout" class="modal-overlay">
+        <div class="modal-content">
+            <h4 class="text-xl font-bold mb-4 text-gray-800">Finalizar Compra</h4>
+            <form id="form-checkout">
+                <label class="block mb-2 text-gray-700">Nome do Comprador:</label>
+                <input type="text" id="nome-comprador" class="w-full px-3 py-2 border rounded mb-4" required>
+                <label class="block mb-2 text-gray-700">Endereço:</label>
+                <input type="text" id="endereco" class="w-full px-3 py-2 border rounded mb-4" required>
+                <label class="block mb-2 text-gray-700">Método de Pagamento:</label>
+                <select id="metodo-pgto" class="w-full px-3 py-2 border rounded mb-4" required>
+                    <option value="Cartão de Crédito">Cartão de Crédito</option>
+                    <option value="Pix">Pix</option>
+                    <option value="Boleto">Boleto</option>
+                </select>
+                <p class="mb-4">Total: R$ <span id="checkout-total">0</span></p>
+                <button type="submit" class="w-full bg-green-500 hover:bg-green-700 text-white py-2 rounded">Confirmar Pagamento</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let cart = [];
+        let totalVendas = 0;
+        let numVendas = 0;
+        let userLogged = '';
+        let userType = '';
+
+        const modalColab = document.getElementById('modal-colaborador');
+        const modalDono = document.getElementById('modal-dono');
+        const modalCart = document.getElementById('modal-cart');
+        const modalCheckout = document.getElementById('modal-checkout');
+        const areaLogada = document.getElementById('area-logada');
+        const cartCount = document.getElementById('cart-count');
+        const cartItems = document.getElementById('cart-items');
+        const cartTotal = document.getElementById('cart-total');
+        const checkoutTotal = document.getElementById('checkout-total');
+        const totalVendasEl = document.getElementById('total-vendas');
+        const lucroLiquidoEl = document.getElementById('lucro-liquido');
+        const numVendasEl = document.getElementById('num-vendas');
+
+        function addToCart(nome, preco) {
+            cart.push({ nome, preco });
+            updateCart();
+            alert(nome + ' adicionado ao carrinho!');
+        }
+
+        function updateCart() {
+            cartCount.textContent = cart.length;
+            cartItems.innerHTML = cart.map(item => `<div class="cart-item"><span>${item.nome} - R$ ${item.preco}</span></div>`).join('');
+            const total = cart.reduce((sum, item) => sum + item.preco, 0);
+            cartTotal.textContent = total;
+            checkoutTotal.textContent = total;
+            document.getElementById('checkout-btn').disabled = cart.length === 0;
+        }
+
+        function closeModals() {
+            [modalColab, modalCart, modalCheckout].forEach(m => m.classList.remove('show'));
+        }
+
+        document.getElementById('view-cart').addEventListener('click', () => {
+            modalCart.classList.add('show');
+        });
+
+        document.getElementById('checkout-btn').addEventListener('click', () => {
+            modalCart.classList.remove('show');
+            modalCheckout.classList.add('show');
+        });
+
+        document.getElementById('form-checkout').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const nome = document.getElementById('nome-comprador').value;
+            const endereco = document.getElementById('endereco').value;
+            const metodo = document.getElementById('metodo-pgto').value;
+            const totalCompra = cart.reduce((sum, item) => sum + item.preco, 0);
+
+            // Salvar logs
+            cart.forEach(item => {
+                const log = {
+                    date: new Date().toLocaleString(),
+                    product: item.nome,
+                    value: 'R$ ' + item.preco,
+                    buyer: nome,
+                    method: metodo
+                };
+                saveLog(log);
+                totalVendas += item.preco;
+                numVendas++;
+                lucroL = totalVendas * 0.8;
+            });
+
+            updateFinancials();
+            cart = [];
+            updateCart();
+            modalCheckout.classList.remove('show');
+            alert('Compra realizada com sucesso! Pagamento processado via ' + metodo);
+        });
+
+        function saveLog(log) {
+            const logs = JSON.parse(localStorage.getItem('licitatech_logs')) || [];
+            logs.push(log);
+            localStorage.setItem('licitatech_logs', JSON.stringify(logs));
+        }
+
+        function loadLogs() {
+            const logs = JSON.parse(localStorage.getItem('licitatech_logs')) || [];
+            document.getElementById('logs-table-body').innerHTML = logs.map(log => `<tr><td>${log.date}</td><td>${log.product}</td><td>${log.value}</td><td>${log.buyer}</td><td>${log.method || 'N/A'}</td></tr>`).join('');
+        }
+
+        function updateFinancials() {
+            totalVendasEl.textContent = totalVendas.toFixed(2);
+            lucroLiquidoEl.textContent = (totalVendas * 0.8).toFixed(2);
+            numVendasEl.textContent = numVendas;
+        }
+
+        document.getElementById('login-colaborador').addEventListener('click', () => modalColab.classList.add('show'));
+        document.getElementById('login-dono').addEventListener('click', () => modalDono.classList.add('show'));
+
+        [modalColab, modalDono, modalCart, modalCheckout].forEach(m => {
+            m.addEventListener('click', (e) => {
+                if (e.target === m) m.classList.remove('show');
+            });
+        });
+
+        document.getElementById('form-colaborador').addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (document.getElementById('user-colab').value && document.getElementById('pass-colab').value) {
+                modalColab.classList.remove('show');
+                areaLogada.style.display = 'block';
+                userLogged = document.getElementById('user-colab').value;
+                userType = 'colaborador';
+                document.getElementById('user-status').textContent = `Logado como colaborador (${userLogged}).`;
+                loadLogs();
+                updateFinancials();
+            }
+        });
+
+        document.getElementById('form-dono').addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (document.getElementById('user-dono').value === 'admin' && document.getElementById('pass-dono').value === '123') {
+                modalDono.classList.remove('show');
+                areaLogada.style.display = 'block';
+                userLogged = document.getElementById('user-dono').value;
+                userType = 'dono';
+                document.getElementById('user-status').textContent = `Logado como dono (${userLogged}).`;
+                loadLogs();
+                updateFinancials();
+            } else {
+                alert('Credenciais inválidas!');
+            }
+        });
+
+        document.getElementById('logout').addEventListener('click', () => {
+            areaLogada.style.display = 'none';
+            userLogged = '';
+            userType = '';
+        });
+
+        loadLogs();
+        updateFinancials();
+    </script>
+</body>
+</html>
+</content>
+</create_file>
